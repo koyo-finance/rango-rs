@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use anyhow::{Context, Result};
 use reqwest::{Client, ClientBuilder, IntoUrl, Url};
 
-use crate::types::{CheckApproval, FailureReportParameters};
+use crate::types::{CheckApproval, FailureReportParameters, WalletDetails};
 
 #[derive(Clone, Debug)]
 pub struct RangoApi {
@@ -79,6 +79,21 @@ impl RangoApi {
         self.client.post(report_url).json(&b).send().await?;
 
         Ok(())
+    }
+
+    pub async fn get_balances(&self, blockchain: &str, address: &str) -> Result<WalletDetails> {
+        let balances_url = self.form_authenticated_url("/basic/balance");
+
+        let resp = self
+            .client
+            .get(balances_url)
+            .query(&[("blockchain", blockchain), ("address", address)])
+            .send()
+            .await?
+            .json::<WalletDetails>()
+            .await?;
+
+        Ok(resp)
     }
 }
 
