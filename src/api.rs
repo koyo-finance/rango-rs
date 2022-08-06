@@ -49,14 +49,14 @@ impl RangoApi {
     ) -> Result<CheckApproval> {
         let is_approved_url = self.form_authenticated_url("/basic/is-approved");
 
-        let res = self
+        let resp = self
             .client
             .get(is_approved_url)
             .query(&[("requestId", request_id), ("txId", transaction_id)])
             .send()
+            .await?
+            .json::<CheckApproval>()
             .await?;
-        let text = res.text().await?;
-        let resp: CheckApproval = serde_json::from_str(&text)?;
 
         Ok(resp)
     }
