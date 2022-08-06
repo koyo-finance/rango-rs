@@ -1,7 +1,9 @@
+use std::collections::HashMap;
+
 use anyhow::{Context, Result};
 use reqwest::{Client, ClientBuilder, IntoUrl, Url};
 
-use crate::types::CheckApproval;
+use crate::types::{CheckApproval, FailureReportParameters};
 
 #[derive(Clone, Debug)]
 pub struct RangoApi {
@@ -59,6 +61,24 @@ impl RangoApi {
             .await?;
 
         Ok(resp)
+    }
+
+    pub async fn report_failure(
+        &self,
+        request_id: &str,
+        details: &HashMap<String, String>,
+    ) -> Result<()> {
+        let report_url = self.form_authenticated_url("/basic/report-tx");
+
+        let b = FailureReportParameters {
+            request_id: request_id.to_string(),
+            event_type: "TX_FAIL".to_string(),
+            data: details.clone(),
+        };
+
+        self.client.post(report_url).json(&b).send().await?;
+
+        Ok(())
     }
 }
 
