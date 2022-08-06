@@ -41,6 +41,7 @@ impl RangoApi {
         url
     }
 
+    /// Returns the approval status of a specific request for a transaction.
     pub async fn get_approval_status(
         &self,
         request_id: &str,
@@ -69,8 +70,7 @@ mod tests {
     #[tokio::test]
     async fn can_get_approval_status() {
         let api_key = env::var("TEST_RANGO_API_KEY").unwrap();
-        let api =
-            RangoApi::with_default_url(Some(api_key));
+        let api = RangoApi::with_default_url(Some(api_key));
 
         let should_be_valid_req = api
             .get_approval_status(
