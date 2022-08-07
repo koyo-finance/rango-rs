@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use anyhow::{Context, Result};
 use reqwest::{Client, ClientBuilder, IntoUrl, Url};
 
-use crate::types::{CheckApproval, FailureReportParameters, WalletDetails};
+use crate::types::{CheckApproval, FailureReportParameters, Meta, WalletDetails};
 
 #[derive(Clone, Debug)]
 pub struct RangoApi {
@@ -58,6 +58,20 @@ impl RangoApi {
             .send()
             .await?
             .json::<CheckApproval>()
+            .await?;
+
+        Ok(resp)
+    }
+
+    pub async fn get_meta(&self) -> Result<Meta> {
+        let meta_url = self.form_authenticated_url("/basic/meta");
+
+        let resp = self
+            .client
+            .get(meta_url)
+            .send()
+            .await?
+            .json::<Meta>()
             .await?;
 
         Ok(resp)
