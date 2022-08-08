@@ -1,7 +1,16 @@
 [package]
 name = "rango"
 version = "0.1.0"
+authors = ["Perpetuum Seven <perpetuum7@koyo.finance>", "Martin Hloska <martin.hloska@gmail.com>"]
+license = "BSD-3-Clause"
 edition = "2021"
+readme = "README.md"
+documentation = "https://docs.rs/rango"
+repository = "https://github.com/koyo-finance/rango-rs"
+homepage = "https://docs.rs/rango"
+description = """
+SDK for interacting with the Rango Exchange API in Rust.
+"""
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
