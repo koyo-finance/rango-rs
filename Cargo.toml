@@ -1,6 +1,6 @@
 [package]
 name = "rango"
-version = "0.1.0"
+version = "0.1.1-rc.1"
 authors = ["Perpetuum Seven <perpetuum7@koyo.finance>", "Martin Hloska <martin.hloska@gmail.com>"]
 license = "BSD-3-Clause"
 edition = "2021"
