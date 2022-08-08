@@ -130,5 +130,15 @@ mod tests {
             .unwrap();
 
         assert!(should_be_valid_req.is_approved);
+
+        let should_be_invalid_req = api
+            .get_approval_status(
+                "7c9d2c35-f0da-475a-aa78-1109562de4f4",
+                "0x9ab55b8ff6ce92381d2c509140a2ae36079a5331e22248cd6974ff008de3d00a",
+            )
+            .await
+            .unwrap();
+
+        assert!(!should_be_invalid_req.is_approved);
     }
 }
