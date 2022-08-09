@@ -14,3 +14,9 @@ Cargo.lock
 
 /target
 /Cargo.lock
+
+# rust toolchain file
+rust-toolchain
+
+# Intellij
+.idea/
