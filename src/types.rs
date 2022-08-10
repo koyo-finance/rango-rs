@@ -93,3 +93,83 @@ pub struct Meta {
     pub tokens: Vec<Token>,
     pub swappers: Vec<SwapperMeta>,
 }
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ResultType {
+    Ok,
+    HighImpact,
+    InputLimitIssue,
+    NoRoute,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum SwapperType {
+    Bridge,
+    Dex,
+    Composer,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QuotePath {
+    from: Token,
+    to: Token,
+    swapper: SwapperMeta,
+    swapper_type: SwapperType,
+    expected_output: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ExpenseType {
+    FromSourceWallet,
+    DecreaseFromOutput,
+    FromDestinationWallet,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwapFee {
+    name: String,
+    token: Token,
+    expense_type: ExpenseType,
+    amount: String,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum RangeType {
+    Inclusive,
+    Exclusive,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AmountRestriction {
+    min: Option<String>,
+    max: Option<String>,
+    #[serde(alias = "type")]
+    range_type: RangeType,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QuoteSimulationResult {
+    output_amount: String,
+    swapper: SwapperMeta,
+    path: Option<Vec<QuotePath>>,
+    fee: Vec<SwapFee>,
+    amount_restriction: Option<AmountRestriction>,
+    estimated_time_in_seconds: u64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwapResponse {
+    pub request_id: String,
+    pub result_type: ResultType,
+    pub route: Qption<QuoteSimulationResult>,
+    pub error: Option<String>,
+    //pub tx:  TODO: add type based on the type; implement correct deserializer
+}
