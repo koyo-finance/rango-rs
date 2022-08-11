@@ -169,7 +169,7 @@ pub struct QuoteSimulationResult {
 pub struct SwapResponse {
     pub request_id: String,
     pub result_type: ResultType,
-    pub route: Qption<QuoteSimulationResult>,
+    pub route: Option<QuoteSimulationResult>,
     pub error: Option<String>,
     //pub tx:  TODO: add type based on the type; implement correct deserializer
 }
