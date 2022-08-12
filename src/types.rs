@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use ethers::types::Address;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum TransactionType {
     Evm,
@@ -32,7 +32,7 @@ pub struct Asset {
     pub symbol: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Token {
     pub blockchain: String,
     pub address: Option<String>,
@@ -51,6 +51,14 @@ pub struct Amount {
 pub struct AssetAndAmount {
     pub amount: Amount,
     pub asset: Asset,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct AssetWithTicker {
+    blockchain: String,
+    address: Option<String>,
+    symbol: String,
+    ticker: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -80,7 +88,7 @@ pub struct BlockchainMeta {
     pub chain_id: Vec<String>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SwapperMeta {
     pub id: String,
     pub title: String,
@@ -111,14 +119,14 @@ pub enum SwapperType {
     Composer,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QuotePath {
-    from: Token,
-    to: Token,
-    swapper: SwapperMeta,
-    swapper_type: SwapperType,
-    expected_output: String,
+    pub from: Token,
+    pub to: Token,
+    pub swapper: SwapperMeta,
+    pub swapper_type: SwapperType,
+    pub expected_output: String,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -129,14 +137,15 @@ pub enum ExpenseType {
     FromDestinationWallet,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SwapFee {
-    name: String,
-    token: Token,
-    expense_type: ExpenseType,
-    amount: String,
+    pub name: String,
+    pub token: Token,
+    pub expense_type: ExpenseType,
+    pub amount: String,
 }
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum RangeType {
@@ -144,32 +153,22 @@ pub enum RangeType {
     Exclusive,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AmountRestriction {
-    min: Option<String>,
-    max: Option<String>,
+    pub min: Option<String>,
+    pub max: Option<String>,
     #[serde(alias = "type")]
-    range_type: RangeType,
+    pub range_type: RangeType,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QuoteSimulationResult {
-    output_amount: String,
-    swapper: SwapperMeta,
-    path: Option<Vec<QuotePath>>,
-    fee: Vec<SwapFee>,
-    amount_restriction: Option<AmountRestriction>,
-    estimated_time_in_seconds: u64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct SwapResponse {
-    pub request_id: String,
-    pub result_type: ResultType,
-    pub route: Option<QuoteSimulationResult>,
-    pub error: Option<String>,
-    //pub tx:  TODO: add type based on the type; implement correct deserializer
+    pub output_amount: String,
+    pub swapper: SwapperMeta,
+    pub path: Option<Vec<QuotePath>>,
+    pub fee: Vec<SwapFee>,
+    pub amount_restriction: Option<AmountRestriction>,
+    pub estimated_time_in_seconds: u64,
 }

@@ -1,6 +1,10 @@
+extern crate core;
+
 use api::RangoApi;
 
 pub mod api;
+mod response;
+mod transactions;
 pub mod types;
 
 #[derive(Clone)]
